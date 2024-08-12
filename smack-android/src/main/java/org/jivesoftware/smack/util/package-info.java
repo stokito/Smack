@@ -1,1 +1,1 @@
-../../../../../../../../smack-core/src/main/java/org/jivesoftware/smack/util/package-info.java
+package org.jivesoftware.smack.util;
