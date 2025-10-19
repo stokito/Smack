@@ -138,7 +138,7 @@ public final class MessageBuilder extends MessageOrPresenceBuilder<Message, Mess
 
         for (Body currentBody : getExtensions(Body.class)) {
             if (StringUtils.nullSafeCharSequenceEquals(language, currentBody.getLanguage())) {
-                throw new IllegalArgumentException("Bodyt with the language " + language + " already exists");
+                throw new IllegalArgumentException("Body with the language " + language + " already exists");
             }
         }
 
