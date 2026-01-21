@@ -82,6 +82,7 @@ import org.jivesoftware.smack.packet.Bind;
 import org.jivesoftware.smack.packet.ErrorIQ;
 import org.jivesoftware.smack.packet.ExtensionElement;
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Limits;
 import org.jivesoftware.smack.packet.Mechanisms;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.MessageBuilder;
@@ -1901,6 +1902,9 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
                     break;
                 case Compress.Feature.ELEMENT:
                     streamFeature = PacketParserUtils.parseCompressionFeature(parser);
+                    break;
+                case Limits.ELEMENT:
+                    streamFeature = PacketParserUtils.parseLimitsFeature(parser);
                     break;
                 default:
                     ExtensionElementProvider<ExtensionElement> provider = ProviderManager.getStreamFeatureProvider(name, namespace);
