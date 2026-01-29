@@ -479,7 +479,13 @@ public final class MultiUserChatManager extends Manager {
 
         Map<EntityBareJid, HostedRoom> answer = new HashMap<>(items.size());
         for (DiscoverItems.Item item : items) {
-            HostedRoom hostedRoom = new HostedRoom(item);
+            HostedRoom hostedRoom;
+            try {
+                hostedRoom = new HostedRoom(item);
+            } catch (Exception e) {
+                LOGGER.warning("Bad hosted room: " + e.getMessage());
+                continue;
+            }
             HostedRoom previousRoom = answer.put(hostedRoom.getJid(), hostedRoom);
             assert previousRoom == null;
         }
