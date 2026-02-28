@@ -53,8 +53,7 @@ public final class MessageBuilder extends MessageOrPresenceBuilder<Message, Mess
 
     @Override
     protected void addStanzaSpecificAttributes(ToStringUtil.Builder builder) {
-        builder.addValue("type", type)
-               ;
+        builder.addValue("type", type);
     }
 
     public MessageBuilder ofType(Message.Type type) {
