@@ -100,7 +100,7 @@ public final class VCard extends IQ {
 
     /**
      * Address types:
-     * POSTAL?, PARCEL?, (DOM | INTL)?, PREF?, POBOX?, EXTADR?, STREET?, LOCALITY?,
+     * POSTAL?, PARCEL?, (DOM | INTL)?, PREF?, POBOX?, EXTADD?, STREET?, LOCALITY?,
      * REGION?, PCODE?, CTRY?
      */
     private final Map<String, String> homeAddr = new HashMap<>();
@@ -271,7 +271,7 @@ public final class VCard extends IQ {
     /**
      * Get home address field.
      *
-     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADR, STREET,
+     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADD, STREET,
      *                  LOCALITY, REGION, PCODE, CTRY
      * @return content of home address field.
      */
@@ -282,7 +282,7 @@ public final class VCard extends IQ {
     /**
      * Set home address field.
      *
-     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADR, STREET,
+     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADD, STREET,
      *                  LOCALITY, REGION, PCODE, CTRY
      * @param value new value for the field.
      */
@@ -293,7 +293,7 @@ public final class VCard extends IQ {
     /**
      * Get work address field.
      *
-     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADR, STREET,
+     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADD, STREET,
      *                  LOCALITY, REGION, PCODE, CTRY
      * @return content of work address field.
      */
@@ -304,7 +304,7 @@ public final class VCard extends IQ {
     /**
      * Set work address field.
      *
-     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADR, STREET,
+     * @param addrField one of POSTAL, PARCEL, (DOM | INTL), PREF, POBOX, EXTADD, STREET,
      *                  LOCALITY, REGION, PCODE, CTRY
      * @param value new value for the field.
      */

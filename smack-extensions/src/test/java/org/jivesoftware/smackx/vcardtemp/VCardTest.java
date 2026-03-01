@@ -62,7 +62,7 @@ public class VCardTest extends SmackTestSuite {
                 + "<TEL><WORK/><MSG/><NUMBER/></TEL>"
                 + "<ADR>"
                     + "<WORK/>"
-                    + "<EXTADD></EXTADD>"
+                    + "<EXTADD>Work Ext. address</EXTADD>"
                     + "<STREET>Work Street</STREET>"
                     + "<LOCALITY>Work Locality</LOCALITY>"
                     + "<REGION>Work Region</REGION>"
@@ -118,6 +118,7 @@ public class VCardTest extends SmackTestSuite {
         assertEquals("123-456-7890", vCard.getPhoneWork("VOICE"));
 
         assertEquals("Work Street", vCard.getAddressFieldWork("STREET"));
+        assertEquals("Work Ext. address", vCard.getAddressFieldWork("EXTADD"));
         assertEquals("Work Locality", vCard.getAddressFieldWork("LOCALITY"));
         assertEquals("Work Region", vCard.getAddressFieldWork("REGION"));
         assertEquals("Work Post Code", vCard.getAddressFieldWork("PCODE"));

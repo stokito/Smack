@@ -46,7 +46,7 @@ public class VCardProvider extends IqProvider<VCard> {
         "INTL",
         "PREF",
         "POBOX",
-        "EXTADR",
+        "EXTADD",
         "STREET",
         "LOCALITY",
         "REGION",
