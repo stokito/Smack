@@ -50,7 +50,7 @@ public class VCardTest extends SmackTestSuite {
                 + "</N>"
                 + "<NICKNAME>User dude</NICKNAME>"
                 + "<URL>http://www.igniterealtime.org</URL>"
-                + "<BDAY>1970-17-03</BDAY>"
+                + "<BDAY>1970-03-17</BDAY>"
                 + "<ORG>"
                     + "<ORGNAME>Ignite Realtime</ORGNAME>"
                     + "<ORGUNIT>Smack</ORGUNIT>"
@@ -104,6 +104,7 @@ public class VCardTest extends SmackTestSuite {
         assertEquals("Programmer & tester", vCard.getField("TITLE"));
         assertEquals("Bug fixer", vCard.getField("ROLE"));
         assertEquals("<Check out our website: http://www.igniterealtime.org>", vCard.getField("DESC"));
+        assertEquals("1970-03-17", vCard.getField("BDAY"));
         assertEquals("http://www.igniterealtime.org", vCard.getField("URL"));
 
         assertEquals("user@igniterealtime.org", vCard.getEmailHome());
@@ -116,6 +117,7 @@ public class VCardTest extends SmackTestSuite {
         assertEquals("123-098-7654", vCard.getPhoneHome("VOICE"));
         assertEquals("123-456-7890", vCard.getPhoneWork("VOICE"));
 
+        assertEquals("Work Street", vCard.getAddressFieldWork("STREET"));
         assertEquals("Work Locality", vCard.getAddressFieldWork("LOCALITY"));
         assertEquals("Work Region", vCard.getAddressFieldWork("REGION"));
         assertEquals("Work Post Code", vCard.getAddressFieldWork("PCODE"));
