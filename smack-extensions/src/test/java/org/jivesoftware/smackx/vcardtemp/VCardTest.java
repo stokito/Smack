@@ -29,6 +29,8 @@ import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class VCardTest extends SmackTestSuite {
 
     @Test
@@ -125,7 +127,7 @@ public class VCardTest extends SmackTestSuite {
         assertEquals("Home Country", vCard.getAddressFieldHome("CTRY"));
 
         byte[] expectedAvatar = getAvatarBinary();
-        assertTrue(Arrays.equals(vCard.getAvatar(), expectedAvatar));
+        assertArrayEquals(expectedAvatar, vCard.getAvatar());
         assertEquals(MIME_TYPE, vCard.getAvatarMimeType());
     }
 
@@ -267,10 +269,10 @@ public class VCardTest extends SmackTestSuite {
 
         byte[] avatar = vCard.getAvatar();
         String mimeType = vCard.getAvatarMimeType();
-        assertEquals(mimeType, MIME_TYPE);
+        assertEquals(MIME_TYPE, mimeType);
 
         byte[] expectedAvatar = getAvatarBinary();
-        assertTrue(Arrays.equals(avatar, expectedAvatar));
+        assertArrayEquals(expectedAvatar, avatar);
     }
 
     public static byte[] getAvatarBinary() {
