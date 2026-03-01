@@ -93,7 +93,7 @@ public class VCardTest extends SmackTestSuite {
 
         VCard vCard = ElementParserUtils.parseStanza(request);
 
-        assertEquals("User PJ Name", vCard.getFullName());
+        assertEquals("User Name", vCard.getFullName());
         assertEquals("User", vCard.getFirstName());
         assertEquals("Name", vCard.getLastName());
         assertEquals("PJ", vCard.getMiddleName());

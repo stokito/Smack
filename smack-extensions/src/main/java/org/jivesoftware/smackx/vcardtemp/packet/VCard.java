@@ -155,6 +155,7 @@ public final class VCard extends IQ {
     /**
      * Set generic VCard field.
      * You should use more specific setters instead:
+     * {@link #setFullName(String)}
      * {@link #setTitle(String)}
      * {@link #setRole(String)}
      * {@link #setBirthday(LocalDate)}
@@ -236,6 +237,15 @@ public final class VCard extends IQ {
 
     public String getFullName() {
         return getField("FN");
+    }
+
+    /**
+     * Set the FN fields with a full name (i.e., first name + middle name + last name).
+     * NOTE: The FN will be overwritten on call of {@link #setFirstName(String)}, {@link #setLastName(String)} etc.
+     * @param fullName the full name for FN field.
+     */
+    public void setFullName(String fullName) {
+        setField("FN", fullName);
     }
 
     public String getNickName() {
@@ -600,7 +610,7 @@ public final class VCard extends IQ {
         if (lastName != null) {
             sb.append(StringUtils.escapeForXml(lastName));
         }
-        setField("FN", sb.toString());
+        setFullName(sb.toString());
     }
 
     /**
