@@ -26,6 +26,7 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -67,7 +68,7 @@ import org.jxmpp.jid.EntityBareJid;
  * vCard.setOrganization("Jetbrains, s.r.o");
  * vCard.setNickName("KIR");
  *
- * vCard.setField("TITLE", "Mr");
+ * vCard.setTitle("Mr");
  * vCard.setAddressFieldHome("STREET", "Some street");
  * vCard.setAddressFieldWork("CTRY", "US");
  * vCard.setPhoneWork("FAX", "3443233");
@@ -135,6 +136,13 @@ public final class VCard extends IQ {
 
     /**
      * Get the content of a generic VCard field.
+     * You should use more specific getters instead:
+     * {@link #getFullName()}
+     * {@link #getTitle()}
+     * {@link #getRole()}
+     * {@link #getBirthday()}
+     * {@link #getUrl()}
+     * {@link #getNote()}
      *
      * @param field value of field. Possible values: NICKNAME, PHOTO, BDAY, JABBERID, MAILER, TZ,
      *              GEO, TITLE, ROLE, LOGO, NOTE, PRODID, REV, SORT-STRING, SOUND, UID, URL, DESC.
@@ -146,6 +154,12 @@ public final class VCard extends IQ {
 
     /**
      * Set generic VCard field.
+     * You should use more specific setters instead:
+     * {@link #setTitle(String)}
+     * {@link #setRole(String)}
+     * {@link #setBirthday(LocalDate)}
+     * {@link #setUrl(String)}
+     * {@link #setNote(String)}
      *
      * @param value value of field
      * @param field field to set. See {@link #getField(String)}
@@ -220,6 +234,10 @@ public final class VCard extends IQ {
         updateFN();
     }
 
+    public String getFullName() {
+        return getField("FN");
+    }
+
     public String getNickName() {
         return getField("NICKNAME");
     }
@@ -266,6 +284,52 @@ public final class VCard extends IQ {
 
     public void setOrganizationUnit(String organizationUnit) {
         this.organizationUnit = organizationUnit;
+    }
+
+    public String getTitle() {
+        return getField("TITLE");
+    }
+
+    public void setTitle(String title) {
+        setField("TITLE", title);
+    }
+
+    public String getRole() {
+        return getField("ROLE");
+    }
+
+    public void setRole(String role) {
+        setField("ROLE", role);
+    }
+
+    public LocalDate getBirthday() {
+        String dobStr = getField("BDAY");
+        return dobStr != null && !dobStr.isEmpty() ? LocalDate.parse(dobStr) : null;
+    }
+
+    public void setBirthday(LocalDate dob) {
+        String dobStr = dob != null ? dob.toString() : null;
+        setField("BDAY", dobStr);
+    }
+
+    public String getUrl() {
+        return getField("URL");
+    }
+
+    public void setUrl(String url) {
+        setField("URL", url);
+    }
+
+    /**
+     * Get the Note (Description) field. It used for bio.
+     * @return value of DESC field.
+     */
+    public String getNote() {
+        return getField("DESC");
+    }
+
+    public void setNote(String note) {
+        setField("DESC", note);
     }
 
     /**
