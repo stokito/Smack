@@ -221,11 +221,11 @@ public final class VCard extends IQ {
     }
 
     public String getNickName() {
-        return otherSimpleFields.get("NICKNAME");
+        return getField("NICKNAME");
     }
 
     public void setNickName(String nickName) {
-        otherSimpleFields.put("NICKNAME", nickName);
+        setField("NICKNAME", nickName);
     }
 
     public String getEmailHome() {
@@ -245,11 +245,11 @@ public final class VCard extends IQ {
     }
 
     public String getJabberId() {
-        return otherSimpleFields.get("JABBERID");
+        return getField("JABBERID");
     }
 
     public void setJabberId(CharSequence jabberId) {
-        otherSimpleFields.put("JABBERID", jabberId.toString());
+        setField("JABBERID", jabberId.toString());
     }
 
     public String getOrganization() {
