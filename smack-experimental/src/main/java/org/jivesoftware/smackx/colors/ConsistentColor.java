@@ -19,7 +19,7 @@ package org.jivesoftware.smackx.colors;
 import org.jivesoftware.smack.util.Objects;
 import org.jivesoftware.smack.util.SHA1;
 
-import org.hsluv.HUSLColorConverter;
+import org.hsluv.HsluvColorConverter;
 
 /**
  * Smack API for Consistent Color Generation (XEP-0392).
@@ -108,21 +108,12 @@ public class ConsistentColor {
      * @see <a href="https://xmpp.org/extensions/xep-0392.html#algorithm-rgb">XEP-0392 §5.4: RGB generation</a>
      */
     private static double[] hsluvToRgb(double hue) {
-        return hsluvToRgb(hue, 100, 50);
-    }
-
-    /**
-     * Converting a HSLuv angle to RGB.
-     *
-     * @param hue angle 0 <= hue < 360
-     * @param saturation saturation 0 <= saturation <= 100
-     * @param lightness lightness 0 <= lightness <= 100
-     * @return rbg array with values 0 <= (r,g,b) <= 1
-     *
-     * @see <a href="https://www.rapidtables.com/convert/color/hsl-to-rgb.html">HSL to RGB conversion</a>
-     */
-    private static double[] hsluvToRgb(double hue, double saturation, double lightness) {
-        return HUSLColorConverter.hsluvToRgb(new double[] {hue, saturation, lightness});
+        HsluvColorConverter conv = new HsluvColorConverter();
+        conv.hsluv_h = hue;
+        conv.hsluv_s = 100;
+        conv.hsluv_l = 50;
+        conv.hsluvToRgb();
+        return new double[] {conv.rgb_r, conv.rgb_g, conv.rgb_b};
     }
 
     private static double[] mixWithBackground(double[] rgbi, float[] rgbb) {
