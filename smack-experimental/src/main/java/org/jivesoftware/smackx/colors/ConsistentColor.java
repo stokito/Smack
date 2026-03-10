@@ -16,6 +16,8 @@
  */
 package org.jivesoftware.smackx.colors;
 
+import static java.lang.Byte.toUnsignedInt;
+
 import org.jivesoftware.smack.util.Objects;
 import org.jivesoftware.smack.util.SHA1;
 
@@ -68,7 +70,7 @@ public class ConsistentColor {
      */
     private static double createAngle(CharSequence input) {
         byte[] h = SHA1.bytes(input.toString());
-        double v = u(h[0]) + (256 * u(h[1]));
+        double v = toUnsignedInt(h[0]) + (256 * toUnsignedInt(h[1]));
         double d = v / 65536;
         return d * 360;
     }
@@ -124,17 +126,6 @@ public class ConsistentColor {
         rgbi[0] = 0.2f * (1 - rgbb[0]) + 0.8f * rgbi[0];
         rgbi[1] = 0.2f * (1 - rgbb[1]) + 0.8f * rgbi[1];
         rgbi[2] = 0.2f * (1 - rgbb[2]) + 0.8f * rgbi[2];
-    }
-
-    /**
-     * Treat a signed java byte as unsigned to get its numerical value.
-     *
-     * @param b signed java byte
-     * @return integer value of its unsigned representation
-     */
-    private static int u(byte b) {
-        // Get unsigned value of signed byte as an integer.
-        return b & 0xFF;
     }
 
     /**
