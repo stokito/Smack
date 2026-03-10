@@ -24,6 +24,6 @@ public class FormFieldRegistryTest {
 
     @Test
     public void testLoadedEntries() {
-        assertEquals(197, FormFieldRegistry.getLoadedFieldEntires());
+        assertEquals(197, FormFieldRegistry.getLoadedFieldEntries());
     }
 }
