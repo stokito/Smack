@@ -113,6 +113,10 @@ public class ConsistentColor {
         conv.hsluv_s = 100;
         conv.hsluv_l = 50;
         conv.hsluvToRgb();
+        // avoid negative values
+        conv.rgb_r = Math.max(0, conv.rgb_r);
+        conv.rgb_g = Math.max(0, conv.rgb_g);
+        conv.rgb_b = Math.max(0, conv.rgb_b);
         return new double[] {conv.rgb_r, conv.rgb_g, conv.rgb_b};
     }
 

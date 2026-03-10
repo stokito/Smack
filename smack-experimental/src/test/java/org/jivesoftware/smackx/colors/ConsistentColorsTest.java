@@ -50,7 +50,7 @@ public class ConsistentColorsTest extends SmackTestSuite {
 
     @Test
     public void romeoRedGreenBlindnessTest() {
-        float[] expected = new float[] {0.865f, 0.000f, 0.686f};
+        float[] expected = new float[] {0.865f, 0.000f, 0.68620354f};
         float[] actual = ConsistentColor.RGBFrom(romeo, redGreenDeficiency);
         assertRGBEquals(expected, actual);
     }
@@ -65,7 +65,7 @@ public class ConsistentColorsTest extends SmackTestSuite {
     @Test
     public void julietNickTest() {
         // may have a negative Red
-        float[] expected = new float[] {-2.7433055E-13f, 0.5226505f, 0.50349814f};
+        float[] expected = new float[] {0f, 0.5226505f, 0.50349814f};
         float[] actual = ConsistentColor.RGBFrom("juliet");
         assertRGBEquals(expected, actual);
     }
