@@ -63,6 +63,14 @@ public class ConsistentColorsTest extends SmackTestSuite {
     }
 
     @Test
+    public void julietNickTest() {
+        // may have a negative Red
+        float[] expected = new float[] {-2.7433055E-13f, 0.5226505f, 0.50349814f};
+        float[] actual = ConsistentColor.RGBFrom("juliet");
+        assertRGBEquals(expected, actual);
+    }
+
+    @Test
     public void julietNoDeficiencyTest() {
         float[] expected = new float[] {0.000f, 0.515f, 0.573f};
         float[] actual = ConsistentColor.RGBFrom(juliet, noDeficiency);
