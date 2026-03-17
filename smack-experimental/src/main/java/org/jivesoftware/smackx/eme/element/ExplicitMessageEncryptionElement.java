@@ -51,6 +51,10 @@ public class ExplicitMessageEncryptionElement implements ExtensionElement {
 
         omemoVAxolotl("eu.siacs.conversations.axolotl", "OMEMO Multi End Message and Object Encryption (XEP-0384)"),
 
+        omemo1("urn:xmpp:omemo:1", "OMEMO Encryption v1 (XEP-0384))"),
+
+        omemo2("urn:xmpp:omemo:2", "OMEMO Encryption (XEP-0384))"),
+
         legacyOpenPGP("jabber:x:encrypted", "Legacy OpenPGP for XMPP [DANGEROUS, DO NOT USE!]"),
         ;
 
