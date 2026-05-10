@@ -90,6 +90,10 @@ public class MarkupElementProvider extends ExtensionElementProvider<MarkupElemen
                             spanStyles.add(SpanElement.SpanStyle.emphasis);
                             break;
 
+                        case SpanElement.strong:
+                            spanStyles.add(SpanElement.SpanStyle.strong);
+                            break;
+
                         case SpanElement.deleted:
                             spanStyles.add(SpanElement.SpanStyle.deleted);
                             break;
