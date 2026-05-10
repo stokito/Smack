@@ -114,6 +114,17 @@ public class MarkupElement implements ExtensionElement {
         }
 
         /**
+         * Mark a section of a message as strongly emphasized (bold font).
+         *
+         * @param start start index
+         * @param end end index
+         * @return builder to be used for chaining.
+         */
+        public Builder setStrong(int start, int end) {
+            return addSpan(start, end, Collections.singleton(SpanElement.SpanStyle.strong));
+        }
+
+        /**
          * Mark a section of a message as inline code.
          *
          * @param start start index

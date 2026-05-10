@@ -62,6 +62,30 @@ public class MessageMarkupTest extends SmackTestSuite {
     }
 
     @Test
+    public void strongTest() throws Exception {
+        String xml =
+                "<markup xmlns='urn:xmpp:markup:0'>" +
+                    "<span start='9' end='15'>" +
+                        "<strong/>" +
+                    "</span>" +
+                "</markup>";
+        MarkupElement.Builder m = MarkupElement.getBuilder();
+        m.setStrong(9, 15);
+        assertXmlSimilar(xml, m.build().toXML().toString());
+
+        XmlPullParser parser = TestUtils.getParser(xml);
+        MarkupElement parsed = new MarkupElementProvider().parse(parser);
+        List<MarkupElement.MarkupChildElement> children = parsed.getChildElements();
+        assertEquals(1, children.size());
+
+        SpanElement spanElement = (SpanElement) children.get(0);
+        assertEquals(9, spanElement.getStart());
+        assertEquals(15, spanElement.getEnd());
+        assertEquals(1, spanElement.getStyles().size());
+        assertEquals(SpanElement.SpanStyle.strong, spanElement.getStyles().iterator().next());
+    }
+
+    @Test
     public void codeTest() throws Exception {
         String xml =
                 "<markup xmlns='urn:xmpp:markup:0'>" +
