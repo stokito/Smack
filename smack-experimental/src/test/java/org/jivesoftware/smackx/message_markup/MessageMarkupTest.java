@@ -165,6 +165,28 @@ public class MessageMarkupTest extends SmackTestSuite {
         CodeBlockElement codeBlock = (CodeBlockElement) children.get(0);
         assertEquals(23, codeBlock.getStart());
         assertEquals(48, codeBlock.getEnd());
+        assertNull(codeBlock.getCodeLanguage());
+    }
+
+    @Test
+    public void codeBlockWithLanguageTest() throws Exception {
+        String xml =
+                "<markup xmlns='urn:xmpp:markup:0'>" +
+                    "<bcode start='23' end='48' language='bash' />" +
+                "</markup>";
+        MarkupElement.Builder m = MarkupElement.getBuilder();
+        m.setCodeBlock(23, 48, "bash");
+        assertXmlSimilar(xml, m.build().toXML().toString());
+
+        XmlPullParser parser = TestUtils.getParser(xml);
+        MarkupElement parsed = new MarkupElementProvider().parse(parser);
+        List<MarkupElement.MarkupChildElement> children = parsed.getChildElements();
+        assertEquals(1, children.size());
+
+        CodeBlockElement codeBlock = (CodeBlockElement) children.get(0);
+        assertEquals(23, codeBlock.getStart());
+        assertEquals(48, codeBlock.getEnd());
+        assertEquals("bash", codeBlock.getCodeLanguage());
     }
 
     @Test

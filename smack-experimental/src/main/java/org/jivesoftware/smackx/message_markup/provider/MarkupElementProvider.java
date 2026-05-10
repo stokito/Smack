@@ -71,7 +71,8 @@ public class MarkupElementProvider extends ExtensionElementProvider<MarkupElemen
                                     "Message Markup CodeBlockElement MUST contain a 'start' attribute.");
                             end = ParserUtils.getIntegerAttributeOrThrow(parser, MarkupChildElement.ATTR_END,
                                     "Message Markup CodeBlockElement MUST contain a 'end' attribute.");
-                            markup.setCodeBlock(start, end);
+                            String codeLanguage = parser.getAttributeValue("", "language");
+                            markup.setCodeBlock(start, end, codeLanguage);
                             break;
 
                         case SpanElement.ELEMENT:
