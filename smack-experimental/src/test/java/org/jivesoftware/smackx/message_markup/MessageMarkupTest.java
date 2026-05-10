@@ -18,7 +18,10 @@ package org.jivesoftware.smackx.message_markup;
 
 import static org.jivesoftware.smack.test.util.XmlAssertUtil.assertXmlSimilar;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -217,9 +220,49 @@ public class MessageMarkupTest extends SmackTestSuite {
         ListElement list = (ListElement) children.get(0);
         assertEquals(31, list.getStart());
         assertEquals(89, list.getEnd());
+        assertFalse(list.isOrdered());
         assertEquals(4, list.getEntries().size());
         assertEquals(list.getStart(), list.getEntries().get(0).getStart());
         assertEquals(47, list.getEntries().get(1).getStart());
+        assertEquals(61, list.getEntries().get(2).getStart());
+        assertEquals(69, list.getEntries().get(3).getStart());
+    }
+
+    @Test
+    public void orderedListTest() throws Exception {
+        String xml =
+                "<markup xmlns='urn:xmpp:markup:0'>" +
+                    "<list start='31' end='89' ordered='true'>" +
+                        "<li start='31'/>" +
+                        "<li start='47'/>" +
+                        "<li start='61'/>" +
+                        "<li start='69'/>" +
+                    "</list>" +
+                "</markup>";
+        MarkupElement.Builder m = MarkupElement.getBuilder();
+        m = m.beginList()
+                .setOrdered(true)
+                .addEntry(31, 47)
+                .addEntry(47, 61)
+                .addEntry(61, 69)
+                .addEntry(69, 89)
+                .endList();
+        assertXmlSimilar(xml, m.build().toXML().toString());
+
+        XmlPullParser parser = TestUtils.getParser(xml);
+        MarkupElement parsed = new MarkupElementProvider().parse(parser);
+        List<MarkupElement.MarkupChildElement> children = parsed.getChildElements();
+        assertEquals(1, children.size());
+
+        ListElement list = (ListElement) children.get(0);
+        assertEquals(31, list.getStart());
+        assertEquals(89, list.getEnd());
+        assertTrue(list.isOrdered());
+        assertEquals(4, list.getEntries().size());
+        assertEquals(list.getStart(), list.getEntries().get(0).getStart());
+        assertEquals(47, list.getEntries().get(1).getStart());
+        assertEquals(61, list.getEntries().get(2).getStart());
+        assertEquals(69, list.getEntries().get(3).getStart());
     }
 
     @Test
