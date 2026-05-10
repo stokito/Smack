@@ -211,6 +211,7 @@ public class MarkupElement implements ExtensionElement {
         public static final class ListBuilder {
             private final Builder markup;
             private final ArrayList<ListElement.ListEntryElement> entries = new ArrayList<>();
+            private boolean ordered;
             private int end = -1;
 
             private ListBuilder(Builder markup) {
@@ -240,6 +241,11 @@ public class MarkupElement implements ExtensionElement {
                 return this;
             }
 
+            public Builder.ListBuilder setOrdered(boolean ordered) {
+                this.ordered = ordered;
+                return this;
+            }
+
             /**
              * End the list.
              *
@@ -248,7 +254,7 @@ public class MarkupElement implements ExtensionElement {
             public Builder endList() {
                 if (entries.size() > 0) {
                     ListElement.ListEntryElement first = entries.get(0);
-                    ListElement list = new ListElement(first.getStart(), end, entries);
+                    ListElement list = new ListElement(first.getStart(), end, entries, ordered);
                     markup.lists.add(list);
                 }
 
@@ -338,7 +344,7 @@ public class MarkupElement implements ExtensionElement {
         }
 
         @Override
-        protected final void afterXmlPrelude(XmlStringBuilder xml) {
+        protected void afterXmlPrelude(XmlStringBuilder xml) {
             xml.rightAngleBracket();
 
             appendInnerXml(xml);
