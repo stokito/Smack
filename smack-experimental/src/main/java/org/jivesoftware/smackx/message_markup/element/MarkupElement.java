@@ -189,12 +189,13 @@ public class MarkupElement implements ExtensionElement {
          *
          * @param start start index
          * @param end end index
+         * @param codeLanguage programming language of the code block (e.g. "java")
          * @return builder to be used for chaining.
          */
-        public Builder setCodeBlock(int start, int end) {
+        public Builder setCodeBlock(int start, int end, String codeLanguage) {
             verifyStartEnd(start, end);
 
-            codes.add(new CodeBlockElement(start, end));
+            codes.add(new CodeBlockElement(start, end, codeLanguage));
             return this;
         }
 
@@ -359,7 +360,7 @@ public class MarkupElement implements ExtensionElement {
         }
 
         @Override
-        protected final void afterXmlPrelude(XmlStringBuilder xml) {
+        protected void afterXmlPrelude(XmlStringBuilder xml) {
             xml.closeEmptyElement();
         }
 
