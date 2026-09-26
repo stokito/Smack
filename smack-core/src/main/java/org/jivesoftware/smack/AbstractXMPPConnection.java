@@ -2152,6 +2152,7 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
 
     private volatile long lastStanzaReceived;
 
+    @Deprecated
     @Override
     public long getLastStanzaReceived() {
         return lastStanzaReceived;
