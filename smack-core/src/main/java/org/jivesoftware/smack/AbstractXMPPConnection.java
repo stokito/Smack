@@ -2150,14 +2150,14 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
         return unregisteredHandler;
     }
 
-    private long lastStanzaReceived;
+    private volatile long lastStanzaReceived;
 
     @Override
     public long getLastStanzaReceived() {
         return lastStanzaReceived;
     }
 
-    private long lastDataReceived;
+    private volatile long lastDataReceived;
 
     protected void notifyDataReceived() {
         lastDataReceived = System.currentTimeMillis();
