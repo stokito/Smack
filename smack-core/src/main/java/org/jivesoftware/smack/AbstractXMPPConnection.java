@@ -1510,7 +1510,6 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
 
         maybeNotifyDebuggerAboutIncoming(stanza);
 
-        lastStanzaReceived = System.currentTimeMillis();
         // Deliver the incoming packet to listeners.
         invokeStanzaCollectorsAndNotifyRecvListeners(stanza);
     }
@@ -2150,11 +2149,9 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
         return unregisteredHandler;
     }
 
-    private volatile long lastStanzaReceived;
-
     @Override
     public long getLastStanzaReceived() {
-        return lastStanzaReceived;
+        return lastDataReceived;
     }
 
     private volatile long lastDataReceived;
@@ -2165,10 +2162,11 @@ public abstract class AbstractXMPPConnection implements XMPPConnection {
 
     @Override
     public long getLastDataReceived() {
-        if (lastDataReceived == 0) {
-            return getLastStanzaReceived();
+        if (lastDataReceived > 0) {
+            return lastDataReceived;
         }
-        return lastDataReceived;
+        // fallback for old connection implementations with only overridden getLastStanzaReceived()
+        return getLastStanzaReceived();
     }
 
     @Override
