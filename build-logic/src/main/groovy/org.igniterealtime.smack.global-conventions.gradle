@@ -3,6 +3,15 @@ ext {
 	javaMajor = javaVersion.getMajorVersion()
 	smackMinAndroidSdk = 26
 
+	jxmppVersion = '1.1.0'
+	miniDnsVersion = '1.1.1'
+	junitVersion = '5.12.2'
+	commonsIoVersion = '2.22.0'
+	bouncyCastleVersion = '1.85.2'
+	guavaVersion = '33.6.0-jre'
+	mockitoVersion = '5.23.0'
+	orgReflectionsVersion = '0.10.2'
+
 	androidBootClasspath = { getAndroidRuntimeJar() }
 }
 
