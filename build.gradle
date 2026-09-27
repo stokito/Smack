@@ -68,15 +68,12 @@ tasks.register('javadocAll', Javadoc) {
 }
 
 project.gradle.projectsEvaluated {
-	def smackCoreCompileClasspath = project(':smack-core').configurations.compileClasspath
 	tasks.named('javadocAll').configure {
 		doFirst {
-			def staticJxmppVersion = getResolvedVersion(smackCoreCompileClasspath, 'org.jxmpp:jxmpp-core')
-			def staticMiniDnsVersion = getResolvedVersion(smackCoreCompileClasspath, 'org.minidns:minidns-core')
 			options.links = [
 				"https://docs.oracle.com/en/java/javase/${javaMajor}/docs/api/",
-				"https://jxmpp.org/releases/${staticJxmppVersion}/javadoc/",
-				"https://minidns.org/releases/${staticMiniDnsVersion}/javadoc/",
+				"https://jxmpp.org/releases/${jxmppVersion}/javadoc/",
+				"https://minidns.org/releases/${miniDnsVersion}/javadoc/",
 			] as String[]
 		}
 	}
@@ -98,21 +95,4 @@ task inttestFull {
 		sinttest,
 		omemoSignalIntTest,
 	]}
-}
-
-def getResolvedVersion(configuration, component) {
-	def artifact = configuration
-		.resolvedConfiguration
-		.resolvedArtifacts
-		.findAll {
-			// 'it' is of type ResolvedArtifact, 'id' of
-			// Component*Artifact*Identifier, and we check the
-			// ComponentIdentifier.
-			it.id.getComponentIdentifier() instanceof org.gradle.api.artifacts.component.ModuleComponentIdentifier
-		}
-	    .find {
-			it.id.getComponentIdentifier().toString().startsWith(component + ':')
-		}
-
-	artifact.getModuleVersion().getId().getVersion()
 }
