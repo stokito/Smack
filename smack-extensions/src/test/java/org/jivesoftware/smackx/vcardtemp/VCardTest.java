@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Locale;
 
 import org.jivesoftware.smack.test.util.ElementParserUtils;
 import org.jivesoftware.smack.test.util.SmackTestSuite;
@@ -82,6 +85,10 @@ public class VCardTest extends SmackTestSuite {
                 + "</ADR>"
                 + "<EMAIL><INTERNET/><PREF/><USERID>user@igniterealtime.org</USERID></EMAIL>"
                 + "<EMAIL><INTERNET/><WORK/><USERID>work@igniterealtime.org</USERID></EMAIL>"
+                + "<GENDER>M</GENDER>"
+                + "<GEO>42.25,-91.05</GEO>"
+                + "<TZ>America/Chicago</TZ>"
+                + "<LANG>zh-Hans,ru,en-US</LANG>"
                 + "<JABBERID>user@igniterealtime.org</JABBERID>"
                 + "<DESC>"
                     + "&lt;Check out our website: http://www.igniterealtime.org&gt;"
@@ -105,6 +112,10 @@ public class VCardTest extends SmackTestSuite {
         assertEquals("Bug fixer", vCard.getRole());
         assertEquals("<Check out our website: http://www.igniterealtime.org>", vCard.getNote());
         assertEquals(LocalDate.of(1970, 3, 17), vCard.getBirthday());
+        assertEquals(VCard.Gender.MALE, vCard.getGender());
+        assertEquals(new VCard.GeoPosition(42.25F, -91.05F), vCard.getGeoPosition());
+        assertEquals(ZoneId.of("America/Chicago"), vCard.getTimeZone());
+        assertEquals(List.of(Locale.forLanguageTag("zh-Hans"), Locale.forLanguageTag("ru"), Locale.forLanguageTag("en-US")), vCard.getLanguages());
         assertEquals("http://www.igniterealtime.org", vCard.getUrl());
 
         assertEquals("user@igniterealtime.org", vCard.getEmailHome());
@@ -148,6 +159,138 @@ public class VCardTest extends SmackTestSuite {
 
         vCard.setBirthday(LocalDate.of(1970, 3, 17));
         assertEquals(LocalDate.of(1970, 3, 17), vCard.getBirthday());
+    }
+
+    @Test
+    public void testGender() throws Throwable {
+        // @formatter:off
+        String request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><GENDER></GENDER></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        VCard vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getGender(), "Empty GENDER field should be parsed to GENDER=null");
+
+        // @formatter:off
+        request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><GENDER>X</GENDER></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getGender(), "Unsupported GENDER field value should be parsed to GENDER=null");
+
+        vCard.setGender(VCard.Gender.MALE);
+        assertEquals(VCard.Gender.MALE, vCard.getGender());
+
+        vCard.setGender(VCard.Gender.FEMALE);
+        assertEquals(VCard.Gender.FEMALE, vCard.getGender());
+
+        vCard.setGender(null);
+        assertNull(vCard.getGender());
+    }
+
+    @Test
+    public void testTimezone() throws Throwable {
+        // @formatter:off
+        String request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><TZ></TZ></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        VCard vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getTimeZone(), "Empty TZ field should be parsed to TimeZone=null");
+
+        // @formatter:off
+        request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><TZ>invalid/timezone</TZ></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getTimeZone(), "Unsupported/invalid TZ field value should be parsed to TimeZone=null");
+
+        vCard.setTimeZone(ZoneId.of("America/Chicago"));
+        assertEquals(ZoneId.of("America/Chicago"), vCard.getTimeZone());
+
+        vCard.setTimeZone(null);
+        assertNull(vCard.getTimeZone());
+    }
+
+    @Test
+    public void testGeoPosition() throws Throwable {
+        // @formatter:off
+        String request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><GEO></GEO></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        VCard vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getGeoPosition(), "Empty GEO field should be parsed to GeoPosition=null");
+
+        // @formatter:off
+        request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><GEO>invalid/geo</GEO></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getGeoPosition(), "Unsupported/invalid GEO field value should be parsed to GeoPosition=null");
+
+        // @formatter:off
+        request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><GEO>100.0,200.0</GEO></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getGeoPosition(), "Out of range GEO coordinates should be parsed to GeoPosition=null");
+
+        vCard.setGeoPosition(new VCard.GeoPosition(42.25F, -91.05F));
+        assertEquals(new VCard.GeoPosition(42.25F, -91.05F), vCard.getGeoPosition());
+
+        vCard.setGeoPosition(null);
+        assertNull(vCard.getGeoPosition());
+    }
+
+    @Test
+    public void testLanguages() throws Throwable {
+        // @formatter:off
+        String request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><LANG></LANG></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        VCard vCard = ElementParserUtils.parseStanza(request);
+        assertNull(vCard.getLanguages(), "Empty LANG field should be parsed to Languages=null");
+
+        // @formatter:off
+        request =
+                "<iq id='v1' to='user@igniterealtime.org/mobile' type='result'>"
+                        + "<vCard xmlns='vcard-temp'><LANG>zh-Hans,ru,en-US</LANG></vCard>"
+                        + "</iq>";
+        // @formatter:on
+
+        vCard = ElementParserUtils.parseStanza(request);
+        List<Locale> expected = List.of(Locale.forLanguageTag("zh-Hans"), Locale.forLanguageTag("ru"), Locale.forLanguageTag("en-US"));
+        assertEquals(expected, vCard.getLanguages());
+
+        vCard.setLanguages(expected);
+        assertEquals(expected, vCard.getLanguages());
+        assertEquals("zh-Hans,ru,en-US", vCard.getField("LANG"));
+
+        vCard.setLanguages(null);
+        assertNull(vCard.getLanguages());
+        assertNull(vCard.getField("LANG"));
     }
 
     @Test

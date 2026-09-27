@@ -26,9 +26,15 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,6 +94,44 @@ public final class VCard extends IQ {
     public static final String ELEMENT = "vCard";
     public static final String NAMESPACE = "vcard-temp";
 
+    public enum Gender { MALE, FEMALE }
+
+    public static final class GeoPosition {
+        private final float lat;
+        private final float lon;
+
+        public GeoPosition(float lat, float lon) {
+            this.lat = lat;
+            this.lon = lon;
+        }
+
+        public float getLat() {
+            return lat;
+        }
+
+        public float getLon() {
+            return lon;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            GeoPosition that = (GeoPosition) obj;
+            return Float.compare(that.lat, lat) == 0 && Float.compare(that.lon, lon) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(lat, lon);
+        }
+
+        @Override
+        public String toString() {
+            return lat + "," + lon;
+        }
+    }
+
     private static final Logger LOGGER = Logger.getLogger(VCard.class.getName());
 
     private static final String DEFAULT_MIME_TYPE = "image/jpeg";
@@ -141,6 +185,10 @@ public final class VCard extends IQ {
      * {@link #getTitle()}
      * {@link #getRole()}
      * {@link #getBirthday()}
+     * {@link #getGender()}
+     * {@link #getGeoPosition()}
+     * {@link #getTimeZone()}
+     * {@link #getLanguages()}
      * {@link #getUrl()}
      * {@link #getNote()}
      *
@@ -159,6 +207,10 @@ public final class VCard extends IQ {
      * {@link #setTitle(String)}
      * {@link #setRole(String)}
      * {@link #setBirthday(LocalDate)}
+     * {@link #setGender(Gender)}
+     * {@link #setGeoPosition(GeoPosition)}
+     * {@link #setTimeZone(ZoneId)}
+     * {@link #setLanguages(List)}
      * {@link #setUrl(String)}
      * {@link #setNote(String)}
      *
@@ -320,6 +372,106 @@ public final class VCard extends IQ {
     public void setBirthday(LocalDate dob) {
         String dobStr = dob != null ? dob.toString() : null;
         setField("BDAY", dobStr);
+    }
+
+    public Gender getGender() {
+        String genderVal = getField("GENDER");
+        if (genderVal == null) {
+            return null;
+        }
+        Gender gender = genderVal.equals("M") ? Gender.MALE : genderVal.equals("F") ? Gender.FEMALE : null;
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        String genderVal = gender == Gender.MALE ? "M" : gender == Gender.FEMALE ? "F" : null;
+        setField("GENDER", genderVal);
+    }
+
+    public GeoPosition getGeoPosition() {
+        String geo = getField("GEO");
+        if (geo == null) {
+            return null;
+        }
+        String[] parts = geo.split(",");
+        if (parts.length != 2) {
+            return null;
+        }
+        try {
+            float lat = Float.parseFloat(parts[0]);
+            float lon = Float.parseFloat(parts[1]);
+            if (Float.isNaN(lat) || Float.isInfinite(lat) || Float.isNaN(lon) || Float.isInfinite(lon)) {
+                return null;
+            }
+            if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0) {
+                return null;
+            }
+            return new GeoPosition(lat, lon);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public void setGeoPosition(GeoPosition geoPosition) {
+        String geo = geoPosition != null ? geoPosition.getLat() + "," + geoPosition.getLon() : null;
+        setField("GEO", geo);
+    }
+
+    public ZoneId getTimeZone() {
+        String tz = getField("TZ");
+        if (tz == null) {
+            return null;
+        }
+        try {
+            return ZoneId.of(tz);
+        } catch (DateTimeException e) {
+            return null;
+        }
+    }
+
+    public void setTimeZone(ZoneId timeZone) {
+        String tz = timeZone != null ? timeZone.getId() : null;
+        setField("TZ", tz);
+    }
+
+    public List<Locale> getLanguages() {
+        String languages = getField("LANG");
+        if (languages == null || languages.isEmpty()) {
+            return null;
+        }
+        String[] codes = languages.split(",");
+        List<Locale> locales = new ArrayList<>(codes.length);
+        for (String code : codes) {
+            String trimmed = code.trim();
+            if (!trimmed.isEmpty()) {
+                try {
+                    Locale locale = Locale.forLanguageTag(trimmed);
+                    locales.add(locale);
+                } catch (Exception ignored) {
+                    // Ignore invalid language tags
+                }
+            }
+        }
+        return locales.isEmpty() ? null : locales;
+    }
+
+    public void setLanguages(List<Locale> languages) {
+        if (languages == null || languages.isEmpty()) {
+            setField("LANG", null);
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Locale locale : languages) {
+            if (locale == null) {
+                continue;
+            }
+            if (sb.length() > 0) {
+                sb.append(',');
+            }
+            sb.append(locale.toLanguageTag());
+        }
+        String langVal = sb.length() > 0 ? sb.toString() : null;
+        setField("LANG", langVal);
     }
 
     public String getUrl() {
